@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+group 'hexGraph'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+ext {
+    slf4jVersion = '1.7.13'
+    kafkaVersion = '1.0.0'
+}
+
+dependencies {
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    implementation "org.apache.kafka:kafka-streams:${kafkaVersion}"
+
+
+    testCompile 'junit:junit:3.8.2'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+}
