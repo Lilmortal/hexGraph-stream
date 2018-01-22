@@ -1,5 +1,6 @@
 package nz.co.hexgraph.stream.config;
 
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,9 @@ public class Configuration {
 
     private String bootstrapServersConfig;
 
-    private String defaultKeySerdeClassConfig;
+    private Class<? extends Serde> defaultKeySerdeClassConfig;
 
-    private String defaultValueSerdeClassConfig;
+    private Class<? extends Serde> defaultValueSerdeClassConfig;
 
     private Configuration() {
         Properties properties = new Properties();
@@ -32,9 +33,9 @@ public class Configuration {
 
         bootstrapServersConfig = properties.getProperty(BOOTSTRAP_SERVERS_CONFIG);
 
-        defaultKeySerdeClassConfig = getSerdes(properties.getProperty(DEFAULT_KEY_SERDE_CLASS_CONFIG));
+        defaultKeySerdeClassConfig = getSerdeClass(properties.getProperty(DEFAULT_KEY_SERDE_CLASS_CONFIG));
 
-        defaultValueSerdeClassConfig = getSerdes(properties.getProperty(DEFAULT_VALUE_SERDE_CLASS_CONFIG));
+        defaultValueSerdeClassConfig = getSerdeClass(properties.getProperty(DEFAULT_VALUE_SERDE_CLASS_CONFIG));
     }
 
     private static class SingletonHelper {
@@ -53,23 +54,23 @@ public class Configuration {
         return bootstrapServersConfig;
     }
 
-    public String getDefaultKeySerdeClassConfig() {
+    public Class<? extends Serde> getDefaultKeySerdeClassConfig() {
         return defaultKeySerdeClassConfig;
     }
 
-    public String getDefaultValueSerdeClassConfig() {
+    public Class<? extends Serde> getDefaultValueSerdeClassConfig() {
         return defaultValueSerdeClassConfig;
     }
 
-    private String getSerdes(String serdes) {
-        String serdesName;
+    private Class<? extends Serde> getSerdeClass(String serdes) {
+        Class<? extends Serde> serdesName;
 
-        switch (serdes) {
+        switch (serdes.toUpperCase()) {
             case "STRING": {
-                serdesName = Serdes.String().getClass().getName();
+                serdesName = Serdes.String().getClass();
             }
             default: {
-                serdesName = "";
+                serdesName = null;
             }
         }
         return serdesName;
