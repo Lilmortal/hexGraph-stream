@@ -42,12 +42,6 @@ jar {
     }
 }
 
-shadowJar {
-    transform(com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer) {
-        Resource = 'reference.conf'
-    }
-}
-
 task wrapper(type: Wrapper) {
     gradleVersion = '4.1'
 }

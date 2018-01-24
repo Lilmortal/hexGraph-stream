@@ -29,7 +29,8 @@ public class HexGraphStreamInitialization {
         String topicHexValue = configuration.getTopicHexValue();
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
         KStream<String, String> source = streamsBuilder.stream(topicHexValue);
-        source.foreach((s, s2) -> LOGGER.info(s + ": " + s2));
+
+        source.groupByKey().count().toStream().foreach((s, s2) -> LOGGER.info(s + ": " + s2));
 
         final Topology topology = streamsBuilder.build();
 
