@@ -48,8 +48,11 @@ public class ConfigurationImpl implements Configuration {
             case "STRING":
                 serdesName = Serdes.String().getClass();
                 break;
+            case "LONG":
+                serdesName = Serdes.Long().getClass();
+                break;
             default:
-                serdesName = null;
+                throw new RuntimeException("It can't read " + serdes + " as a serdes type.");
         }
         return serdesName;
     }
