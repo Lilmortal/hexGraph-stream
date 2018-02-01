@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,13 +31,16 @@ public class ImageAggregationDeserializer implements Deserializer {
             if (jsonNode.isPresent()) {
                 imageAggregation.imagePath = jsonNode.get().get("imagePath").asText();
 
-                Map<String, Integer> counts = new HashMap<>();
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+//                LocalDateTime dateTime = LocalDateTime.parse(jsonNode.get().get("creationDate").asText(), formatter);
+//                imageAggregation.creationDate = dateTime;
+
                 if (jsonNode.get().get("counts") != null) {
                     JsonNode a = jsonNode.get().get("counts");
                     String b = a.toString();
-                    TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
-                    Map<String, String> countsMap = new ObjectMapper().readValue(b, typeRef);
-                    imageAggregation.counts = counts;
+                    TypeReference<HashMap<String, Integer>> typeRef = new TypeReference<HashMap<String, Integer>>() {};
+                    Map<String, Integer> countsMap = new ObjectMapper().readValue(b, typeRef);
+                    imageAggregation.counts = countsMap;
                 }
             }
         } catch (IOException e) {

@@ -16,6 +16,8 @@ public class ConfigurationSingleton {
 
     private static final String TOPIC_HEX_VALUE_CONFIG = "topic.hex.value";
 
+    private static final String TOPIC_RESULT = "topic.result";
+
     private static final String APPLICATION_ID_CONFIG = "application.id.config";
 
     private static final String BOOTSTRAP_SERVERS_CONFIG = "bootstrap.servers.config";
@@ -25,6 +27,8 @@ public class ConfigurationSingleton {
     private static final String DEFAULT_VALUE_SERDE_CLASS_CONFIG = "default.value.serde.class.config";
 
     private String topicHexValue;
+
+    private String topicResult;
 
     private String applicationIdConfig;
 
@@ -45,6 +49,8 @@ public class ConfigurationSingleton {
 
         topicHexValue = properties.getProperty(TOPIC_HEX_VALUE_CONFIG);
 
+        topicResult = properties.getProperty(TOPIC_RESULT);
+
         applicationIdConfig = properties.getProperty(APPLICATION_ID_CONFIG);
 
         bootstrapServersConfig = properties.getProperty(BOOTSTRAP_SERVERS_CONFIG);
@@ -64,6 +70,10 @@ public class ConfigurationSingleton {
 
     public String getTopicHexValue() {
         return topicHexValue;
+    }
+
+    public String getTopicResult() {
+        return topicResult;
     }
 
     public String getApplicationIdConfig() {

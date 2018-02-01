@@ -2,8 +2,10 @@ package nz.co.hexgraph.stream;
 
 import nz.co.hexgraph.stream.config.Configuration;
 import nz.co.hexgraph.stream.config.StreamConfigPropertiesBuilder;
-import nz.co.hexgraph.stream.imageaggregation.ImageAggregation;
-import nz.co.hexgraph.stream.imageaggregation.ImageAggregationSerde;
+import nz.co.hexgraph.stream.imagehex.ImageHex;
+import nz.co.hexgraph.stream.imagehex.ImageHexSerde;
+import nz.co.hexgraph.stream.imagehexaggregation.ImageAggregation;
+import nz.co.hexgraph.stream.imagehexaggregation.ImageAggregationSerde;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -35,23 +37,15 @@ public class HexGraphStreamInitialization {
         String topicHexValue = configuration.getTopicHexValue();
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
         // TODO: See if can update generics automatically via config.properties
-        KStream<String, String> source = streamsBuilder.stream(topicHexValue,
-                Consumed.with(new Serdes.StringSerde(), new Serdes.StringSerde()));
+        KStream<String, ImageHex> source = streamsBuilder.stream(topicHexValue,
+                Consumed.with(new Serdes.StringSerde(), new ImageHexSerde()));
 
 //        source.foreach((k,v) -> LOGGER.info(k + " ===== " + v));
         source.groupByKey().aggregate(ImageAggregation::new, (key, value, agg) -> {
             agg.imagePath = key;
-            agg.hexCode = value;
-            agg.count = agg.count + 1;
-            LOGGER.info(key + " -=-=-= " + value);
-            LOGGER.info(agg.toString());
+            agg.counts.put(value.hexCode, agg.counts.getOrDefault(value.hexCode, 0) + 1);
             return agg;
-        }, Materialized.with(new Serdes.StringSerde(), new ImageAggregationSerde()));
-
-        source.groupByKey().reduce((v1, v2) -> {
-            LOGGER.info(v1 + " " + v2);
-            return v2;
-        });
+        }, Materialized.with(new Serdes.StringSerde(), new ImageAggregationSerde())).toStream().to(configuration.getTopicResult(), Produced.with(Serdes.String(), new ImageAggregationSerde()));
 
         final Topology topology = streamsBuilder.build();
 

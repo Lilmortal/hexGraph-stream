@@ -14,6 +14,11 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
+    public String getTopicResult() {
+        return configurationSingleton.getTopicResult();
+    }
+
+    @Override
     public String getApplicationIdConfig() {
         return configurationSingleton.getApplicationIdConfig();
     }
