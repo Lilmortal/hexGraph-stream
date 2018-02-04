@@ -43,6 +43,7 @@ public class HexGraphStreamInitialization {
 //        source.foreach((k,v) -> LOGGER.info(k + " ===== " + v));
         source.groupByKey().aggregate(ImageAggregation::new, (key, value, agg) -> {
             agg.imagePath = key;
+            agg.creationDate = value.creationDate;
             agg.counts.put(value.hexCode, agg.counts.getOrDefault(value.hexCode, 0) + 1);
             return agg;
         }, Materialized.with(new Serdes.StringSerde(), new ImageAggregationSerde())).toStream().to(configuration.getTopicResult(), Produced.with(Serdes.String(), new ImageAggregationSerde()));
