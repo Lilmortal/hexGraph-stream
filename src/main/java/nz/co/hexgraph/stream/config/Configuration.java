@@ -3,7 +3,7 @@ package nz.co.hexgraph.stream.config;
 import org.apache.kafka.common.serialization.Serde;
 
 public interface Configuration {
-    String getTopicHexValue();
+    String getTopicHexCode();
 
     String getTopicResult();
 

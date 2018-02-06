@@ -30,10 +30,7 @@ public class ImageAggregationDeserializer implements Deserializer {
 
             if (jsonNode.isPresent()) {
                 imageAggregation.imagePath = jsonNode.get().get("imagePath").asText();
-
-//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-//                LocalDateTime dateTime = LocalDateTime.parse(jsonNode.get().get("creationDate").asText(), formatter);
-//                imageAggregation.creationDate = dateTime;
+                imageAggregation.creationDate = jsonNode.get().get("creationDate").asText();
 
                 if (jsonNode.get().get("counts") != null) {
                     JsonNode a = jsonNode.get().get("counts");

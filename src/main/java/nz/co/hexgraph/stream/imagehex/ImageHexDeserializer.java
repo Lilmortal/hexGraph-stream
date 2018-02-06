@@ -2,7 +2,6 @@ package nz.co.hexgraph.stream.imagehex;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nz.co.hexgraph.stream.imagehexaggregation.ImageAggregation;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.io.IOException;
@@ -21,10 +20,13 @@ public class ImageHexDeserializer implements Deserializer {
             return null;
         }
         try {
-            JsonNode jsonNode = new ObjectMapper().readTree(data);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(data);
             imageHex = new ImageHex();
-            // TODO: What happen if hexValue doesnt exist
-            imageHex.hexCode = jsonNode.get("hexValue").asText();
+
+            imageHex.creationDate = jsonNode.get("creationDate").asText();
+            // TODO: What happen if hexCode doesnt exist
+            imageHex.hexCode = jsonNode.get("hexCode").asText();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,5 @@
 package nz.co.hexgraph.stream.config;
 
-import org.apache.kafka.common.serialization.Serde;
-import org.apache.kafka.common.serialization.Serdes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +12,7 @@ public class ConfigurationSingleton {
 
     private static final String CONFIG_NAME = "config.properties";
 
-    private static final String TOPIC_HEX_VALUE_CONFIG = "topic.hex.value";
+    private static final String TOPIC_HEX_CODE_CONFIG = "topic.hex.code";
 
     private static final String TOPIC_RESULT = "topic.result";
 
@@ -26,7 +24,7 @@ public class ConfigurationSingleton {
 
     private static final String DEFAULT_VALUE_SERDE_CLASS_CONFIG = "default.value.serde.class.config";
 
-    private String topicHexValue;
+    private String topicHexCode;
 
     private String topicResult;
 
@@ -47,7 +45,7 @@ public class ConfigurationSingleton {
             LOG.error(e.getMessage());
         }
 
-        topicHexValue = properties.getProperty(TOPIC_HEX_VALUE_CONFIG);
+        topicHexCode = properties.getProperty(TOPIC_HEX_CODE_CONFIG);
 
         topicResult = properties.getProperty(TOPIC_RESULT);
 
@@ -68,8 +66,8 @@ public class ConfigurationSingleton {
         return SingletonHelper.INSTANCE;
     }
 
-    public String getTopicHexValue() {
-        return topicHexValue;
+    public String getTopicHexCode() {
+        return topicHexCode;
     }
 
     public String getTopicResult() {

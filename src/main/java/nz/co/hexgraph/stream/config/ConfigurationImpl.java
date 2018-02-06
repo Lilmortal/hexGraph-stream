@@ -3,14 +3,12 @@ package nz.co.hexgraph.stream.config;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 
-import java.util.Optional;
-
 public class ConfigurationImpl implements Configuration {
     ConfigurationSingleton configurationSingleton = ConfigurationSingleton.getInstance();
 
     @Override
-    public String getTopicHexValue() {
-        return configurationSingleton.getTopicHexValue();
+    public String getTopicHexCode() {
+        return configurationSingleton.getTopicHexCode();
     }
 
     @Override

@@ -6,10 +6,7 @@ import nz.co.hexgraph.stream.imagehex.ImageHex;
 import nz.co.hexgraph.stream.imagehex.ImageHexSerde;
 import nz.co.hexgraph.stream.imagehexaggregation.ImageAggregation;
 import nz.co.hexgraph.stream.imagehexaggregation.ImageAggregationSerde;
-import org.apache.kafka.common.serialization.Deserializer;
-import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.streams.Consumed;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -18,7 +15,6 @@ import org.apache.kafka.streams.kstream.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
 import java.util.Properties;
 
 public class HexGraphStreamInitialization {
@@ -34,13 +30,12 @@ public class HexGraphStreamInitialization {
         Properties streamConfigProperties = new StreamConfigPropertiesBuilder(configuration.getApplicationIdConfig(),
                 configuration.getBootstrapServersConfig(), configuration.getDefaultKeySerdeClassConfig(), configuration.getDefaultValueSerdeClassConfig()).build();
 
-        String topicHexValue = configuration.getTopicHexValue();
+        String topicHexCode = configuration.getTopicHexCode();
         final StreamsBuilder streamsBuilder = new StreamsBuilder();
         // TODO: See if can update generics automatically via config.properties
-        KStream<String, ImageHex> source = streamsBuilder.stream(topicHexValue,
+        KStream<String, ImageHex> source = streamsBuilder.stream(topicHexCode,
                 Consumed.with(new Serdes.StringSerde(), new ImageHexSerde()));
 
-//        source.foreach((k,v) -> LOGGER.info(k + " ===== " + v));
         source.groupByKey().aggregate(ImageAggregation::new, (key, value, agg) -> {
             agg.imagePath = key;
             agg.creationDate = value.creationDate;
